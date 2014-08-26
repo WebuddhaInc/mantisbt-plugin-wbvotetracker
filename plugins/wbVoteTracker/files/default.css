@@ -1,0 +1,207 @@
+
+/************************************************************************************************************************************
+ *
+ * wbVoteTracker plugin for MantisBT
+ * 2013 - David Hunt, Webuddha.com
+ *
+ ************************************************************************************************************************************/
+
+/*******************************************************************************************/
+@import url(http://fonts.googleapis.com/css?family=Roboto+Condensed);
+
+/*******************************************************************************************/
+.wbVoteTracker {
+  padding:10px 0;
+}
+.wbVoteTracker h3 {
+  color:#336699;
+  font-family: 'Roboto Condensed', sans-serif!important;
+  font-size:18px;
+  font-weight:normal;
+  margin:0;
+  padding:0 0 5px 0;
+}
+.wbVoteTracker h4 {
+  color:#003377;
+  font-family: 'Roboto Condensed', sans-serif!important;
+  font-size:15px;
+  font-weight:normal;
+  margin:0;
+  padding:0 0 5px 0;
+}
+
+/*******************************************************************************************/
+.wbVoteTracker .requestList {
+  padding:10px 0;
+}
+.wbVoteTracker .requestList .clr {
+  clear:both;
+}
+.wbVoteTracker .requestList .request {
+  margin:0;
+  border-bottom:1px dashed #999;
+  padding:5px 0;
+}
+.wbVoteTracker .requestList .request .votes {
+  width:48px;
+  height:85px;
+  float:left;
+  text-align:center;
+  margin:0 5px 0 0;
+}
+.wbVoteTracker .requestList .request .votes input.btn_vote {
+  margin:5px 0 0 0;
+  display:inline-block;
+  padding:2px 6px;
+  font-size:11px;
+}
+.wbVoteTracker .requestList .request .votes b {
+  padding:10px 0 5px 0;
+  display:block;
+  font-size:1.0rem;
+}
+.wbVoteTracker .requestList .request .info {
+  height:85px;
+}
+.wbVoteTracker .requestList .request .key {
+  float:right;
+  line-height:32px;
+}
+.wbVoteTracker .requestList .request .summary {
+  font-size:1.2rem;
+  line-height:32px;
+  height:32px;
+  overflow:hidden;
+}
+.wbVoteTracker .requestList .request .summary a {
+  text-decoration:none;
+  color:#346;
+}
+.wbVoteTracker .requestList .request .status,
+.wbVoteTracker .requestList .request .created,
+.wbVoteTracker .requestList .request .updated,
+.wbVoteTracker .requestList .request .stats {
+  display:inline-block;
+  line-height:24px;
+  padding:0 5px;
+  margin:0 5px;
+}
+.wbVoteTracker .requestList .request .priority {
+  float:right;
+}
+.wbVoteTracker .requestList .request .priority,
+.wbVoteTracker .requestList .request .category {
+  display:inline-block;
+  line-height:24px;
+  padding:0 5px;
+}
+.wbVoteTracker .requestList .request .status {
+  border-radius:3px;
+  background:#FFFF99;
+  margin:0;
+  float:right;
+}
+.wbVoteTracker .requestList .request .category {
+  border-radius:3px;
+  background:#FFFF99;
+}
+.wbVoteTracker .requestList .request .category.bugs {
+  border-radius:3px;
+  background:#CCCCCC;
+}
+.wbVoteTracker .requestList .request .created {
+  margin-left:0;
+}
+.wbVoteTracker .requestList .empty_msg {
+  margin:10px 0;
+  padding:10px;
+  border-radius:6px;
+  background:#EEE;
+}
+
+/*******************************************************************************************/
+.wbVoteTracker .requestListControl .total {
+  display:inline-block;
+}
+.wbVoteTracker .requestListControl .button {
+  float:right;
+}
+.wbVoteTracker .requestListControl .button a {
+  padding:4px 10px;
+  margin:0;
+  border-radius:4px;
+  background-color:#EEEEEE;
+  border:1px solid #999;
+  box-shadow:0px 3px 3px #999;
+  text-decoration:none;
+  color:#333;
+}
+.wbVoteTracker .requestListControl .links {
+  float:right;
+}
+
+/*******************************************************************************************/
+.wbVoteTracker .searchRequests {
+  margin:10px 0;
+  padding:20px;
+  border-radius:4px;
+  background-color:#FFFFCC;
+  border:1px solid #EEEECC;
+}
+.wbVoteTracker .searchRequests input[type=text] {
+  font-size:1.0rem;
+  padding:4px;
+  width:440px;
+  margin:0;
+}
+.wbVoteTracker .searchRequests input[type=submit],
+.wbVoteTracker .searchRequests input[type=button] {
+  padding:4px 10px;
+  margin:0;
+  border-radius:4px;
+  background-color:#EEEEEE;
+  border:1px solid #999;
+  box-shadow:0px 3px 3px #999;
+}
+
+/*******************************************************************************************/
+.wbVoteTracker .rColBox {
+  margin:10px 0;
+  padding:20px;
+  border-radius:4px;
+  background-color:#F6F6F6;
+  border:1px solid #E6E6E6;
+}
+.wbVoteTracker .rColBox hr {
+  margin:10px 0;
+  padding:0;
+  color:#999;
+}
+.wbVoteTracker .rColBox ul {
+  list-style:circle;
+  padding:0 0 0 24px;
+  margin:0;
+}
+.wbVoteTracker .rColBox ul li {
+  line-height:18px;
+  padding:0;
+}
+.wbVoteTracker .rColBox ul li a {
+  text-decoration:none;
+  font-size:11px;
+  color:#333;
+}
+.wbVoteTracker .rColBox .row {
+}
+.wbVoteTracker .rColBox .row.sub {
+  padding:0 0 0 10px;
+}
+.wbVoteTracker .rColBox .row.sub b,
+.wbVoteTracker .rColBox .row.sub span {
+  font-size:10px;
+}
+.wbVoteTracker .rColBox.visited,
+.wbVoteTracker .rColBox.visited a {
+  font-size:11px;
+  color:#333;
+}
