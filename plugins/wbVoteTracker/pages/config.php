@@ -7,7 +7,7 @@
  *
  ************************************************************************************************************************************/
 
-html_page_top( lang_get( 'plugin_wbfeaturetracker_header_config' ) );
+html_page_top( lang_get( 'plugin_wbvotetracker_header_config' ) );
 
 $t_logged_in_user_id = auth_get_current_user_id();
 if ( user_is_anonymous( $t_logged_in_user_id ) ) {
@@ -28,7 +28,7 @@ else {
   <form class="" action="<?php echo plugin_page( 'config_save' ) ?>" method="post">
     <?php echo form_security_field( 'config' ) ?>
     <fieldset>
-      <legend><?php echo lang_get('plugin_wbfeaturetracker_header_config') ?></legend>
+      <legend><?php echo lang_get('plugin_wbvotetracker_header_config') ?></legend>
       <div class="field">
         <label>Categories to Display</label><br/>
         <select name="config[filterCategories][]" multiple>

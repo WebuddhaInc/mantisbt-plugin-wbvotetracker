@@ -7,7 +7,7 @@
  *
  ************************************************************************************************************************************/
 
-html_page_top( lang_get( 'plugin_wbfeaturetracker_header_config' ) );
+html_page_top( lang_get( 'plugin_wbvotetracker_header_config' ) );
 
 $t_logged_in_user_id = auth_get_current_user_id();
 if ( user_is_anonymous( $t_logged_in_user_id ) ) {

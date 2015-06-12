@@ -2,7 +2,7 @@
 
 /************************************************************************************************************************************
  *
- * wbwbVoteTracker plugin for MantisBT
+ * wbVoteTracker plugin for MantisBT
  * 2013 - David Hunt, Webuddha.com
  *
  ************************************************************************************************************************************/
@@ -23,8 +23,8 @@ class wbVoteTrackerPlugin extends MantisPlugin  {
    ***************************************************************************/
 	function register( ) {
 
-		$this->name = lang_get( 'plugin_wbfeaturetracker_title' );
-		$this->description = lang_get( 'plugin_wbfeaturetracker_description' );
+		$this->name = lang_get( 'plugin_wbvotetracker_title' );
+    $this->description = lang_get( 'plugin_wbvotetracker_description' );
 		$this->page = 'config';
 
 		$this->version = '1.0';
@@ -46,6 +46,11 @@ class wbVoteTrackerPlugin extends MantisPlugin  {
     // Constants
     define( 'BUG_VOTE', 30 );
 
+    // Redirect My Page to Dashboard
+    if( strpos( $_SERVER['REQUEST_URI'], 'my_view_page.php' ) !== false ){
+      header('Location: plugin.php?page=wbVoteTracker/dashboard');
+    }
+
 	}
 
   /***************************************************************************
@@ -64,16 +69,27 @@ class wbVoteTrackerPlugin extends MantisPlugin  {
    *
    *
    ***************************************************************************/
+  function events() {
+    return array(
+      'EVENT_MENU_MAIN_FRONT' => EVENT_TYPE_FIRST
+      );
+  }
+
+  /***************************************************************************
+   *
+   *
+   *
+   ***************************************************************************/
   function hooks() {
     return array(
-      'EVENT_MENU_ISSUE' => 'EVENT_MENU_ISSUE',
-      'EVENT_LAYOUT_RIGHT_COLUMN' => 'EVENT_LAYOUT_RIGHT_COLUMN',
-      'EVENT_MENU_MAIN_FRONT' => 'EVENT_MENU_MAIN_FRONT',
-      'EVENT_LAYOUT_RESOURCES' => 'EVENT_LAYOUT_RESOURCES',
+      'EVENT_MENU_ISSUE'           => 'EVENT_MENU_ISSUE',
+      'EVENT_LAYOUT_RIGHT_COLUMN'  => 'EVENT_LAYOUT_RIGHT_COLUMN',
+      'EVENT_MENU_MAIN_FRONT'      => 'EVENT_MENU_MAIN_FRONT',
+      'EVENT_LAYOUT_RESOURCES'     => 'EVENT_LAYOUT_RESOURCES',
       'EVENT_LAYOUT_CONTENT_BEGIN' => 'EVENT_LAYOUT_CONTENT_BEGIN',
-      'EVENT_LAYOUT_CONTENT_END' => 'EVENT_LAYOUT_CONTENT_END',
-      'EVENT_LAYOUT_BODY_BEGIN' => 'EVENT_LAYOUT_BODY_BEGIN',
-      'EVENT_LAYOUT_BODY_END' => 'EVENT_LAYOUT_BODY_END'
+      'EVENT_LAYOUT_CONTENT_END'   => 'EVENT_LAYOUT_CONTENT_END',
+      'EVENT_LAYOUT_BODY_BEGIN'    => 'EVENT_LAYOUT_BODY_BEGIN',
+      'EVENT_LAYOUT_BODY_END'      => 'EVENT_LAYOUT_BODY_END'
     );
   }
 
@@ -84,42 +100,61 @@ class wbVoteTrackerPlugin extends MantisPlugin  {
    ***************************************************************************/
 	function schema(){
 
-		global $g_db;
+    global $g_db;
 
-		// schema version
-    $schema_count = plugin_config_get( 'schema', -1, false, ALL_USERS, ALL_PROJECTS );
+    // Push Plugin
+    plugin_push_current('wbVoteTracker');
+
+		// schema version\
+    $schema = array();
+    $schema_count = (int)plugin_config_get( 'schema', -1, false, ALL_USERS, ALL_PROJECTS );
 
 		/* v100 */
-		$schema[] = Array('CreateTableSQL',Array(db_get_table( 'mantis_bug_vote_table' ), "
-		  id I UNSIGNED NOTNULL PRIMARY AUTOINCREMENT,
-		  bug_id I UNSIGNED NOTNULL,
-		  user_id I UNSIGNED NOTNULL,
-		  date_created I UNSIGNED NOTNULL
-		  ", Array('mysql' => 'ENGINE=MyISAM DEFAULT CHARSET=utf8', 'pgsql' => 'WITHOUT OIDS')));
-		$schema[] = Array( 'CreateIndexSQL', Array( 'idx_bug_vote_bug_id', db_get_table( 'mantis_bug_vote_table' ), 'bug_id' ) );
-		$schema[] = Array( 'CreateIndexSQL', Array( 'idx_bug_vote_user_id', db_get_table( 'mantis_bug_vote_table' ), 'user_id' ) );
-		$schema[] = Array( 'AddColumnSQL', Array( db_get_table( 'mantis_bug_table' ), "vote_count I UNSIGNED NOTNULL DEFAULT '0'"));
+      if( $schema_count < 4 ){
+        $schema[] = Array(
+            'CreateTableSQL',
+            Array(
+              db_get_table( 'mantis_bug_vote_table' ),
+              "
+                id I UNSIGNED NOTNULL PRIMARY AUTOINCREMENT,
+                bug_id I UNSIGNED NOTNULL,
+                user_id I UNSIGNED NOTNULL,
+                date_created I UNSIGNED NOTNULL
+              ",
+              Array(
+                'mysql' => 'ENGINE=MyISAM DEFAULT CHARSET=utf8',
+                'pgsql' => 'WITHOUT OIDS'
+              )
+            )
+          );
+        $schema[] = Array( 'CreateIndexSQL', Array( 'idx_bug_vote_bug_id', db_get_table( 'mantis_bug_vote_table' ), 'bug_id' ) );
+        $schema[] = Array( 'CreateIndexSQL', Array( 'idx_bug_vote_user_id', db_get_table( 'mantis_bug_vote_table' ), 'user_id' ) );
+        $schema[] = Array( 'AddColumnSQL', Array( db_get_table( 'mantis_bug_table' ), "vote_count I UNSIGNED NOTNULL DEFAULT '0'"));
+      }
 
-		if( $schema_count < count($schema) )
-			foreach( $schema AS $schema_line ){
-				$dict = NewDataDictionary( $g_db );
-				$t_target = $schema_line[1][0];
-				echo '<tr><td bgcolor="#ffffff">';
-				if( isset( $schema_line[2] ) ) {
-					if( call_user_func_array( $schema_line[2][0], $schema_line[2][1] ) ) {
-						$sqlarray = call_user_func_array( Array( $dict, $schema_line[0] ), $schema_line[1] );
-					} else {
-						$sqlarray = array();
-					}
-				} else {
-					$sqlarray = call_user_func_array( Array( $dict, $schema_line[0] ), $schema_line[1] );
-				}
-				$ret = $dict->ExecuteSQLArray( $sqlarray, false );
-				if( $ret == 2 )
-					plugin_config_set( 'schema', ++$schema_count, NO_USER, ALL_PROJECTS  );
-        else
-          echo $g_db->ErrorMsg() . "<br>";
-			}
+    /* Apply Schema */
+      if( count($schema) ){
+        for( $i=0; $i < count($schema); $i++ ){
+          $schema_line = $schema[$i];
+          $dict = NewDataDictionary( $g_db );
+          $t_target = $schema_line[1][0];
+          if( isset( $schema_line[2] ) ) {
+            if( call_user_func_array( $schema_line[2][0], $schema_line[2][1] ) ) {
+              $sqlarray = call_user_func_array( Array( $dict, $schema_line[0] ), $schema_line[1] );
+            } else {
+              $sqlarray = array();
+            }
+          } else {
+            $sqlarray = call_user_func_array( Array( $dict, $schema_line[0] ), $schema_line[1] );
+          }
+          $ret = $dict->ExecuteSQLArray( $sqlarray, false );
+          if( $ret != 2 ){
+            echo '<div class="message error">'. $g_db->ErrorMsg() . "</div>";
+          }
+          $schema_count++;
+        }
+        plugin_config_set( 'schema', $schema_count, NO_USER, ALL_PROJECTS  );
+      }
 
 	}
 
@@ -219,7 +254,7 @@ class wbVoteTrackerPlugin extends MantisPlugin  {
    *
    *
    ***************************************************************************/
-  function html_button( $p_page, $p_button_text, $p_fields = null, $p_method = 'post' ) {
+  function html_button( $p_page, $p_button_text, $p_fields = null, $p_method = 'post', $p_params=array() ) {
     $html = array();
     $p_button_text = string_attribute( $p_button_text );
     if( null === $p_fields ) $p_fields = array();
@@ -236,7 +271,9 @@ class wbVoteTrackerPlugin extends MantisPlugin  {
       $val = string_attribute( $val );
       $html[] = "  <input type=\"hidden\" name=\"$key\" value=\"$val\" />\n";
     }
-    $html[] = "  <input type=\"submit\" class=\"button\" value=\"$p_button_text\" />\n";
+    $class = isset($p_params['class']) ? ' '.$p_params['class'] : null;
+    $extra = isset($p_params['extra']) ? ' '.$p_params['extra'] : null;
+    $html[] = "  <input type=\"submit\" class=\"button{$class}\" value=\"$p_button_text\" {$extra} />\n";
     $html[] = "</form>\n";
     return implode("\n", $html);
   }
@@ -403,9 +440,6 @@ class wbVoteTrackerPlugin extends MantisPlugin  {
       '<a class="suggestions" href="'. plugin_page( 'browse' ) .'&reset=true&category=Features">Features</a>',
       '<a class="bugs" href="'. plugin_page( 'browse' ) .'&reset=true&category=Bugs">Bugs</a>'
       );
-
-    return ;
-
   }
 
   /***************************************************************************

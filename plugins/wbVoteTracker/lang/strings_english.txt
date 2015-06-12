@@ -7,9 +7,9 @@
  *
  ************************************************************************************************************************************/
 
-$s_plugin_wbfeaturetracker_title = 'Vote Tracker';
-$s_plugin_wbfeaturetracker_description = 'Vote Tracker for Mantis Bug Tracker';
+$s_plugin_wbvotetracker_title = 'wbVoteTracker';
+$s_plugin_wbvotetracker_description = 'Vote Tracker for Mantis Bug Tracker';
 
-$s_plugin_wbfeaturetracker_header_config = 'Configuration';
+$s_plugin_wbvotetracker_header_config = 'Configuration';
 
-$s_plugin_wbfeaturetracker_btn_returntolist = 'Return to List';
+$s_plugin_wbvotetracker_btn_returntolist = 'Return to List';

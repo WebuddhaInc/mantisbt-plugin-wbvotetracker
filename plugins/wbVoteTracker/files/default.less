@@ -1,0 +1,223 @@
+
+/************************************************************************************************************************************
+ *
+ * wbVoteTracker plugin for MantisBT
+ * 2013 - David Hunt, Webuddha.com
+ *
+ ************************************************************************************************************************************/
+
+/*******************************************************************************************/
+@import url(http://fonts.googleapis.com/css?family=Roboto+Condensed);
+
+/*******************************************************************************************/
+
+  .wbVoteTracker {
+
+    /*******************************************************************************************/
+
+      h3 {
+        color:#336699;
+        font-family: 'Roboto Condensed', sans-serif!important;
+        font-size:18px;
+        font-weight:normal;
+        margin:0;
+        padding:0 0 5px 0;
+      }
+      h4 {
+        color:#003377;
+        font-family: 'Roboto Condensed', sans-serif!important;
+        font-size:15px;
+        font-weight:normal;
+        margin:0;
+        padding:0 0 5px 0;
+      }
+
+    /*******************************************************************************************/
+
+      .requestList {
+        padding:10px 0;
+      }
+      .requestList .clr {
+        clear:both;
+      }
+      .requestList .request {
+        margin:0;
+        border-bottom:1px dashed #999;
+        padding:5px 0;
+      }
+      .requestList .request .votes {
+        width:48px;
+        height:85px;
+        float:left;
+        text-align:center;
+        margin:0 5px 0 0;
+      }
+      .requestList .request .votes input.btn_vote {
+        margin:5px 0 0 0;
+        display:inline-block;
+        padding:2px 6px;
+        font-size:11px;
+      }
+      .requestList .request .votes b {
+        padding:10px 0 5px 0;
+        display:block;
+        font-size:1.0rem;
+      }
+      .requestList .request .info {
+        height:85px;
+      }
+      .requestList .request .key {
+        float:right;
+        line-height:32px;
+      }
+      .requestList .request .summary {
+        font-size:1.2rem;
+        line-height:32px;
+        height:32px;
+        overflow:hidden;
+      }
+      .requestList .request .summary a {
+        text-decoration:none;
+        color:#346;
+      }
+      .requestList .request .status,
+      .requestList .request .created,
+      .requestList .request .updated,
+      .requestList .request .stats {
+        display:inline-block;
+        line-height:24px;
+        padding:0 5px;
+        margin:0 5px;
+      }
+      .requestList .request .priority {
+        float:right;
+      }
+      .requestList .request .priority,
+      .requestList .request .category {
+        display:inline-block;
+        line-height:24px;
+        padding:0 5px;
+      }
+      .requestList .request .status {
+        border-radius:3px;
+        background:#FFFF99;
+        margin:0;
+        float:right;
+      }
+      .requestList .request .category {
+        border-radius:3px;
+        background:#FFFF99;
+      }
+      .requestList .request .category.bugs {
+        border-radius:3px;
+        background:#CCCCCC;
+      }
+      .requestList .request .created {
+        margin-left:0;
+      }
+      .requestList .empty_msg {
+        margin:10px 0;
+        padding:10px;
+        border-radius:6px;
+        background:#EEE;
+      }
+
+    /*******************************************************************************************/
+
+      .requestListControl .total {
+        display:inline-block;
+      }
+      .requestListControl .button {
+        float:right;
+      }
+      .requestListControl .button a {
+        padding:4px 10px;
+        margin:0;
+        border-radius:4px;
+        background-color:#EEEEEE;
+        border:1px solid #999;
+        box-shadow:0px 3px 3px #999;
+        text-decoration:none;
+        color:#333;
+      }
+      .requestListControl .links {
+        float:right;
+      }
+
+    /*******************************************************************************************/
+
+      .searchRequests {
+        margin:10px 0;
+        padding:20px;
+        border-radius:4px;
+        background-color:#FFFFCC;
+        border:1px solid #EEEECC;
+        form {
+          position: relative;
+          display: block;
+          input {
+            font-size: 1.0rem;
+            padding: 6px 10px;
+            line-height: 24px;
+            height: 48px;
+            margin: 0;
+          }
+          input[type=text] {
+            width: 100%;
+            padding-right: 25%;
+          }
+          input[type=submit],
+          input[type=button] {
+            position: absolute;
+            right: 0;
+            top: 0;
+            background-color: #EEEEEE;
+            border: 1px solid #999;
+          }
+        }
+      }
+
+    /*******************************************************************************************/
+
+      .rColBox {
+        margin:10px 0;
+        padding:20px;
+        border-radius:4px;
+        background-color:#F6F6F6;
+        border:1px solid #E6E6E6;
+      }
+      .rColBox hr {
+        margin:10px 0;
+        padding:0;
+        color:#999;
+      }
+      .rColBox ul {
+        list-style:circle;
+        padding:0 0 0 24px;
+        margin:0;
+      }
+      .rColBox ul li {
+        line-height:18px;
+        padding:0;
+      }
+      .rColBox ul li a {
+        text-decoration:none;
+        font-size:11px;
+        color:#333;
+      }
+      .rColBox .row {
+      }
+      .rColBox .row.sub {
+        padding:0 0 0 10px;
+      }
+      .rColBox .row.sub b,
+      .rColBox .row.sub span {
+        font-size:10px;
+      }
+      .rColBox.visited,
+      .rColBox.visited a {
+        font-size:11px;
+        color:#333;
+      }
+
+  }

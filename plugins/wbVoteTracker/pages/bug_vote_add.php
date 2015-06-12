@@ -55,7 +55,7 @@ if( $result ){
     echo '<script> setTimeout(function(){ history.back(-1); },'.((int)current_user_get_pref('redirect_delay',1)*1000).'); </script>';
     echo '<br /><div class="center">';
     echo 'You vote was recorded.<br />';
-    print_bracket_link( 'plugin.php?page=wbVoteTracker/browse&reset=true&category='.$t_category->name, lang_get( 'plugin_wbfeaturetracker_btn_returntolist' ) );
+    print_bracket_link( 'plugin.php?page=wbVoteTracker/browse&reset=true&category='.$t_category->name, lang_get( 'plugin_wbvotetracker_btn_returntolist' ) );
     print_bracket_link( 'view.php?id='.$f_bug_id, lang_get( 'proceed' ) );
     echo '</div>';
     html_page_bottom();
@@ -65,7 +65,7 @@ if( $result ){
   html_page_top( null, $p_redirect_to );
   echo '<br /><div class="center">';
   echo 'You have already voted for this bug.<br />';
-  print_bracket_link( 'plugin.php?page=wbVoteTracker/browse&reset=true&category='.$t_category->name, lang_get( 'plugin_wbfeaturetracker_btn_returntolist' ) );
+  print_bracket_link( 'plugin.php?page=wbVoteTracker/browse&reset=true&category='.$t_category->name, lang_get( 'plugin_wbvotetracker_btn_returntolist' ) );
   print_bracket_link( 'view.php?id='.$f_bug_id, lang_get( 'proceed' ) );
   echo '</div>';
   html_page_bottom();
