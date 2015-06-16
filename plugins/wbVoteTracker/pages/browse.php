@@ -174,31 +174,33 @@
             echo '</div>';
             echo '<div class="info">';
 
-              echo '<div class="key">'; print_bug_link( $t_bug->id ); echo '</div>';
+              echo '<div class="key">';
+                print_bug_link( $t_bug->id );
+              echo '</div>';
 
               echo '<div class="summary">';
+                echo '<a href="view.php?id='.$t_bug->id.'">';
                 if( ON == config_get( 'show_bug_project_links' ) && helper_get_current_project() != $t_bug->project_id ) {
-                  echo '[', string_display_line( project_get_name( $t_bug->project_id ) ), '] ';
+                  echo string_display_line( project_get_name( $t_bug->project_id ) ), ': ';
                 }
-                echo '<a href="view.php?id='.$t_bug->id.'">'.$t_summary.'</a>';
-                // if( !bug_is_readonly( $t_bug->id ) && access_has_bug_level( $t_update_bug_threshold, $t_bug->id ) )
-                //   echo '<a href="' . string_get_bug_update_url( $t_bug->id ) . '" class="update"><img border="0" src="' . $t_icon_path . 'update.png' . '" alt="' . lang_get( 'update_bug_button' ) . '" /></a>';
+                echo $t_summary;
+                echo '</a>';
               echo '</div>';
 
               $cat_name = category_full_name( $t_bug->category_id, true, $t_bug->project_id );
               echo '<div class="category '.strtolower(preg_replace('/[^A-Za-z0-9\-\_]+/','',$cat_name)).'">';
-              echo string_display_line( $cat_name );
+                echo string_display_line( $cat_name );
               echo '</div>';
 
               $status_color = get_status_color( $t_bug->status, auth_get_current_user_id(), $t_bug->project_id );
               echo '<div class="status" style="background-color:'.$status_color.'">';
-              printf( '<span class="issue-status" title="%1$s">%2$s</span>',
-                get_enum_element( 'resolution', $t_bug->resolution, auth_get_current_user_id(), $t_bug->project_id ),
-                get_enum_element( 'status', $t_bug->status, auth_get_current_user_id(), $t_bug->project_id )
-              );
-              if(( ON == config_get( 'show_assigned_names' ) ) && ( $t_bug->handler_id > 0 ) && ( access_has_project_level( config_get( 'view_handler_threshold' ), $t_bug->project_id ) ) ) {
-                printf( ' (%s)', prepare_user_name( $t_bug->handler_id ) );
-              }
+                printf( '<span class="issue-status" title="%1$s">%2$s</span>',
+                  get_enum_element( 'resolution', $t_bug->resolution, auth_get_current_user_id(), $t_bug->project_id ),
+                  get_enum_element( 'status', $t_bug->status, auth_get_current_user_id(), $t_bug->project_id )
+                );
+                if(( ON == config_get( 'show_assigned_names' ) ) && ( $t_bug->handler_id > 0 ) && ( access_has_project_level( config_get( 'view_handler_threshold' ), $t_bug->project_id ) ) ) {
+                  printf( ' (%s)', prepare_user_name( $t_bug->handler_id ) );
+                }
               echo '</div>';
 
               echo '<div class="stats">';
@@ -209,20 +211,21 @@
 
               echo '<br/>';
               echo '<div class="priority">';
-              print_formatted_priority_string( $t_bug );
+                print_formatted_priority_string( $t_bug );
               echo '</div>';
 
               echo '<div class="created">Posted by ';
-              if( $t_bug->reporter_id > 0 )
-                echo prepare_user_name( $t_bug->reporter_id );
+                if( $t_bug->reporter_id > 0 )
+                  echo prepare_user_name( $t_bug->reporter_id );
               echo '</div>';
 
               echo '<div class="updated">Updated ';
-              if( $t_bug->last_updated > strtotime( '-' . $t_filter[FILTER_PROPERTY_HIGHLIGHT_CHANGED] . ' hours' ) ) {
-                echo '<b>' . $t_last_updated . '</b>';
-              } else {
-                echo $t_last_updated;
-              }
+                if( $t_bug->last_updated > strtotime( '-' . $t_filter[FILTER_PROPERTY_HIGHLIGHT_CHANGED] . ' hours' ) ) {
+                  echo '<b>' . $t_last_updated . '</b>';
+                }
+                else {
+                  echo $t_last_updated;
+                }
               echo '</div>';
 
             echo '</div>';
