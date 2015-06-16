@@ -7,17 +7,29 @@
  *
  ************************************************************************************************************************************/
 
-$s_plugin_wbvotetracker_title = 'wbVoteTracker';
-$s_plugin_wbvotetracker_description = 'Vote Tracker for Mantis Bug Tracker';
+$s_plugin_wbvotetracker_title                                    = 'wbVoteTracker';
+$s_plugin_wbvotetracker_description                              = 'Vote Tracker for Mantis Bug Tracker';
 
-$s_plugin_wbvotetracker_header_config = 'Configuration';
+$s_plugin_wbvotetracker_header_config                            = 'Configuration';
 
-$s_plugin_wbvotetracker_btn_returntolist = 'Return to List';
+$s_plugin_wbvotetracker_btn_returntolist                         = 'Return to List';
 
-$s_plugin_wbvotetracker_statistics_header_all = 'All Project Statistics';
-$s_plugin_wbvotetracker_statistics_header_project = '%s Statistics';
-$s_plugin_wbvotetracker_statistics_label_total = 'Total Requests';
-$s_plugin_wbvotetracker_statistics_label_total_active = 'Active Requests';
-$s_plugin_wbvotetracker_statistics_label_total_bugs_resolved = 'Bugs Fixed';
+$s_plugin_wbvotetracker_statistics_header_all                    = 'All Project Statistics';
+$s_plugin_wbvotetracker_statistics_header_project                = '%s Statistics';
+$s_plugin_wbvotetracker_statistics_label_total                   = 'Total Requests';
+$s_plugin_wbvotetracker_statistics_label_total_active            = 'Active Requests';
+$s_plugin_wbvotetracker_statistics_label_total_bugs_resolved     = 'Bugs Fixed';
 $s_plugin_wbvotetracker_statistics_label_total_features_resolved = 'Features Added';
-$s_plugin_wbvotetracker_statistics_label_total_closed = 'Closed Requests';
+$s_plugin_wbvotetracker_statistics_label_total_closed            = 'Closed Requests';
+
+$s_plugin_wbvotetracker_browse_title_dashboard                   = "Tracker Dashboard";
+$s_plugin_wbvotetracker_browse_title_all                         = "View All Requests";
+$s_plugin_wbvotetracker_browse_title_category                    = "Browse %s";
+
+$s_plugin_wbvotetracker_browse_header_dashboard                  = "Search for a request";
+$s_plugin_wbvotetracker_browse_header_all_mine                   = "Search all your requests";
+$s_plugin_wbvotetracker_browse_header_category_mine              = "Search you %s requests";
+$s_plugin_wbvotetracker_browse_header_all                        = "Search in All requests";
+$s_plugin_wbvotetracker_browse_header_category                   = "Search in all %s requests";
+
+$s_plugin_wbvotetracker_browse_empty                             = "There are no records to view";
