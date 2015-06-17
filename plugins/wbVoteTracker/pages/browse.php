@@ -187,7 +187,7 @@
                 echo '</a>';
               echo '</div>';
 
-              $cat_name = category_full_name( $t_bug->category_id, true, $t_bug->project_id );
+              $cat_name = wbVoteTrackerHelper::category_full_name( $t_bug->category_id, true, $t_bug->project_id );
               echo '<div class="category '.strtolower(preg_replace('/[^A-Za-z0-9\-\_]+/','',$cat_name)).'">';
                 echo string_display_line( $cat_name );
               echo '</div>';

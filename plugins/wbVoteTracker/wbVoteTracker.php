@@ -8,6 +8,7 @@
  ************************************************************************************************************************************/
 
 require_once( config_get( 'class_path' ) . 'MantisPlugin.class.php' );
+require_once( 'helper.php' );
 
 /******************************************************************************************
  *
@@ -23,35 +24,68 @@ class wbVoteTrackerPlugin extends MantisPlugin  {
    ***************************************************************************/
 	function register( ) {
 
-		$this->name = lang_get( 'plugin_wbvotetracker_title' );
-    $this->description = lang_get( 'plugin_wbvotetracker_description' );
-		$this->page = 'config';
-
-		$this->version = '1.1';
-		$this->requires = array(
-			'MantisCore' => '1.2.19',
-		);
-
-		$this->author 	= 'David Hunt, Webuddha.com';
-		$this->contact 	= 'mantisbt-dev@webuddha.com';
-		$this->url 			= 'http://www.webuddha.com';
+    // Plugin
+      $this->name        = lang_get( 'plugin_wbvotetracker_title' );
+      $this->description = lang_get( 'plugin_wbvotetracker_description' );
+      $this->page        = 'config';
+  		$this->version = '1.1';
+  		$this->requires = array(
+  			'MantisCore' => '1.2.19',
+  		);
+  		$this->author 	= 'David Hunt, Webuddha.com';
+  		$this->contact 	= 'mantisbt-dev@webuddha.com';
+  		$this->url 			= 'http://www.webuddha.com';
 
     // Thresholds
-    $GLOBALS['g_vote_bug_threshold']            = REPORTER; // Vote
-    $GLOBALS['g_vote_add_others_bug_threshold'] = MANAGER;  // Vote for another user
+      $GLOBALS['g_vote_bug_threshold']                = REPORTER; // Vote
+      $GLOBALS['g_vote_add_others_bug_threshold']     = MANAGER;  // Vote for another user
+
+    // Database Table
+      $GLOBALS['g_db_table']['mantis_bug_vote_table'] = '%db_table_prefix%_bug_vote%db_table_suffix%';
 
     // Event Defenitions
-    event_declare( 'EVENT_LAYOUT_RIGHT_COLUMN', EVENT_TYPE_DEFAULT );
+      event_declare( 'EVENT_LAYOUT_RIGHT_COLUMN', EVENT_TYPE_DEFAULT );
 
     // Constants
-    define( 'BUG_VOTE', 30 );
+      define( 'BUG_VOTE', 30 );
+      define( 'WBVOTE_CATEGORY_FEATURES', 1 );
+      define( 'WBVOTE_CATEGORY_BUGS', 2 );
 
     // Redirect My Page to Dashboard
-    if( strpos( $_SERVER['REQUEST_URI'], 'my_view_page.php' ) !== false ){
-      header('Location: plugin.php?page=wbVoteTracker/dashboard');
-    }
+      if( strpos( $_SERVER['REQUEST_URI'], 'my_view_page.php' ) !== false ){
+        header('Location: plugin.php?page=wbVoteTracker/dashboard');
+      }
+
+    // Initialize User Functions
+      $this->initUser();
 
 	}
+
+  /***************************************************************************
+   *
+   *
+   *
+   ***************************************************************************/
+  function initUser(){
+
+    // Extract Globals
+      foreach( array_keys($GLOBALS) AS $key ){
+        ${ $key } =& $GLOBALS[ $key ];
+      }
+
+    // Require
+      require_once( 'authentication_api.php' );
+      require_once( 'current_user_api.php' );
+
+    // Move globals into global space
+      $defined_vars = get_defined_vars();
+      foreach( array_keys($defined_vars) AS $key ){
+        if( strpos($key, 'g_') === 0 && !isset($GLOBALS[ $key ]) ){
+          $GLOBALS[ $key ] = ${ $key };
+        }
+      }
+
+  }
 
   /***************************************************************************
    *
@@ -376,10 +410,10 @@ class wbVoteTrackerPlugin extends MantisPlugin  {
         <div class="row">
           <b><?php
             $t_bug_table = db_get_table( 'mantis_bug_table' );
-            $result = db_query_bound("SELECT COUNT(*) AS `total` FROM ".$t_bug_table." WHERE ".$t_bug_table_where." AND `status` IN (".db_param().",".db_param().",".db_param().") AND `category_id` IN (".db_param().")",Array( RESOLVED, IMPLEMENTED, CLOSED, 6 ));
+            $result = db_query_bound("SELECT COUNT(*) AS `total` FROM ".$t_bug_table." WHERE ".$t_bug_table_where." AND `status` IN (".db_param().",".db_param().",".db_param().") AND `category_id` IN (".db_param().")",Array( RESOLVED, IMPLEMENTED, CLOSED, WBVOTE_CATEGORY_BUGS ));
             $row = db_fetch_array( $result ); echo $row['total'];
             $t_bug_table = db_get_table( 'mantis_bug_table' );
-            $result = db_query_bound("SELECT COUNT(*) AS `total` FROM ".$t_bug_table." WHERE ".$t_bug_table_where." AND `category_id` IN (".db_param().")",Array( 6 ));
+            $result = db_query_bound("SELECT COUNT(*) AS `total` FROM ".$t_bug_table." WHERE ".$t_bug_table_where." AND `category_id` IN (".db_param().")",Array( WBVOTE_CATEGORY_BUGS ));
             $row = db_fetch_array( $result ); echo ' of '.$row['total'];
           ?></b>
           <span><?php echo lang_get( 'plugin_wbvotetracker_statistics_label_total_bugs_resolved' ); ?></span>
@@ -387,10 +421,10 @@ class wbVoteTrackerPlugin extends MantisPlugin  {
         <div class="row">
           <b><?php
             $t_bug_table = db_get_table( 'mantis_bug_table' );
-            $result = db_query_bound("SELECT COUNT(*) AS `total` FROM ".$t_bug_table." WHERE ".$t_bug_table_where." AND `status` IN (".db_param().",".db_param().",".db_param().") AND `category_id` IN (".db_param().")",Array( RESOLVED, IMPLEMENTED, CLOSED, 4 ));
+            $result = db_query_bound("SELECT COUNT(*) AS `total` FROM ".$t_bug_table." WHERE ".$t_bug_table_where." AND `status` IN (".db_param().",".db_param().",".db_param().") AND `category_id` IN (".db_param().")",Array( RESOLVED, IMPLEMENTED, CLOSED, WBVOTE_CATEGORY_FEATURES ));
             $row = db_fetch_array( $result ); echo $row['total'];
             $t_bug_table = db_get_table( 'mantis_bug_table' );
-            $result = db_query_bound("SELECT COUNT(*) AS `total` FROM ".$t_bug_table." WHERE ".$t_bug_table_where." AND `category_id` IN (".db_param().")",Array( 4 ));
+            $result = db_query_bound("SELECT COUNT(*) AS `total` FROM ".$t_bug_table." WHERE ".$t_bug_table_where." AND `category_id` IN (".db_param().")",Array( WBVOTE_CATEGORY_FEATURES ));
             $row = db_fetch_array( $result ); echo ' of '.$row['total'];
           ?></b>
           <span><?php echo lang_get( 'plugin_wbvotetracker_statistics_label_total_features_resolved' ); ?></span>
@@ -453,11 +487,14 @@ class wbVoteTrackerPlugin extends MantisPlugin  {
    *
    ***************************************************************************/
   function EVENT_MENU_MAIN_FRONT(){
-    return array(
+    $menu = array(
       '<a class="dashboard" href="'. plugin_page( 'dashboard' ) .'">Dashboard</a>',
       '<a class="suggestions" href="'. plugin_page( 'browse' ) .'&reset=true&category=Features">Features</a>',
       '<a class="bugs" href="'. plugin_page( 'browse' ) .'&reset=true&category=Bugs">Bugs</a>'
       );
+    if( current_user_get_access_level() == VS_PUBLIC )
+      $menu[] = '<a class="login_report" href="'. helper_mantis_url( 'login_page.php' ) .'">'. lang_get( 'report_bug_link' ) .'</a>';
+    return $menu;
   }
 
   /***************************************************************************
