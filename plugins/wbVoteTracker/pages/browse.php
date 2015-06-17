@@ -39,10 +39,6 @@
   $category_key                    = gpc_get_string( 'category', '' );
   $reporter_id                     = gpc_get_string_array( FILTER_SEARCH_REPORTER_ID, META_FILTER_ANY );
 
-  // Auto Refresh
-  if ( current_user_get_pref( 'refresh_delay' ) > 0 )
-    html_meta_redirect( plugin_page( $t_page ), current_user_get_pref( 'refresh_delay' ) * 60 );
-
   // Build Query Filters
     $c_filter = array(
       FILTER_PROPERTY_CATEGORY          => Array( '0' => META_FILTER_ANY ),
@@ -89,19 +85,25 @@
 
   // Apply Page Header
     if( $t_page == 'dashboard' ){
-      html_page_top( lang_get('plugin_wbvotetracker_browse_title_dashboard') );
+      html_page_top1( lang_get('plugin_wbvotetracker_browse_title_dashboard') );
     }
     else {
-      html_page_top(
+      html_page_top1(
         empty($category_key)
         ? lang_get('plugin_wbvotetracker_browse_title_all')
         : sprintf( lang_get('plugin_wbvotetracker_browse_title_category'), $category_key )
         );
     }
 
+  // Auto Refresh
+    if ( current_user_get_pref( 'refresh_delay' ) > 0 )
+      html_meta_redirect( plugin_page( $t_page ), current_user_get_pref( 'refresh_delay' ) * 60 );
+
+  // Header Part 2
+    html_page_top2();
+
   // Render
     ?>
-
     <div class="searchRequests">
       <?php if( $t_page == 'dashboard' ){ ?>
         <h3><?php echo lang_get('plugin_wbvotetracker_browse_header_dashboard') ?></h3>

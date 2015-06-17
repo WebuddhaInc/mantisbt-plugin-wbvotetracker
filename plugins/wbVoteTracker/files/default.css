@@ -13,6 +13,36 @@
   /*******************************************************************************************/
   /*******************************************************************************************/
   /*******************************************************************************************/
+  /*******************************************************************************************/
+  /*******************************************************************************************/
+}
+.wbVoteTracker .row {
+  box-sizing: border-box;
+  white-space: nowrap;
+  text-align: left;
+}
+.wbVoteTracker .row .col {
+  white-space: initial;
+  margin: 15px 1%;
+  padding: 0;
+  box-sizing: border-box;
+  display: inline-block;
+  text-align: left;
+  vertical-align: top;
+}
+.wbVoteTracker .row .col.center {
+  width: 68%;
+}
+.wbVoteTracker .row .col.right {
+  width: 28%;
+}
+@media (max-width: 720px) {
+  .wbVoteTracker .row .col.center,
+  .wbVoteTracker .row .col.right {
+    float: none;
+    display: block;
+    width: 98%;
+  }
 }
 .wbVoteTracker h3 {
   color: #336699;

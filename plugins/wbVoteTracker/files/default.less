@@ -14,7 +14,39 @@
   .wbVoteTracker {
 
     /*******************************************************************************************/
+      .row {
+        box-sizing: border-box;
+        white-space: nowrap;
+        text-align: left;
+        .col {
+          white-space: initial;
+          margin: 15px 1%;
+          padding: 0;
+          box-sizing: border-box;
+          display: inline-block;
+          text-align: left;
+          vertical-align: top;
+          &.center {
+            width: 68%;
+          }
+          &.right {
+            width: 28%;
+          }
+        }
+      }
 
+    /*******************************************************************************************/
+      @media (max-width: 720px) {
+        .row {
+          .col.center,
+          .col.right {
+            display: block;
+            width: 98%;
+          }
+        }
+      }
+
+    /*******************************************************************************************/
       h3 {
         color:#336699;
         font-family: 'Roboto Condensed', sans-serif!important;

@@ -338,7 +338,7 @@ class wbVoteTrackerPlugin extends MantisPlugin  {
     if( !preg_match('/wbVoteTracker/',gpc_get_string('page', '')) ) return;
 
     // Add stylesheet
-    echo '<link rel="stylesheet" type="text/css" href="', plugin_file( 'default.css' ), '?r='.rand(0,999).'"/>';
+    echo '<link rel="stylesheet" type="text/css" href="'. helper_mantis_url('plugins/wbVoteTracker/files/default.css') .'"/>';
 
   }
 
@@ -381,102 +381,99 @@ class wbVoteTrackerPlugin extends MantisPlugin  {
     // Render Sidebar
     ob_start();
     ?>
-    <td valign="top" width="30%">
-      <div class="rColBox stats">
-        <h3><?php
-          if( $project_row ){
-            echo sprintf( lang_get( 'plugin_wbvotetracker_statistics_header_project' ), $project_row['name'] );
-          }
-          else {
-            echo lang_get( 'plugin_wbvotetracker_statistics_header_all' );
-          }
-        ?></h3>
-        <div class="row">
-          <b><?php
-            $t_bug_table = db_get_table( 'mantis_bug_table' );
-            $result = db_query_bound("SELECT COUNT(*) AS `total` FROM ".$t_bug_table." WHERE ".$t_bug_table_where,Array());
-            $row = db_fetch_array( $result ); echo $row['total'];
-          ?></b>
-          <span><?php echo lang_get( 'plugin_wbvotetracker_statistics_label_total' ); ?></span>
-        </div>
-        <div class="row">
-          <b><?php
-            $t_bug_table = db_get_table( 'mantis_bug_table' );
-            $result = db_query_bound("SELECT COUNT(*) AS `total` FROM ".$t_bug_table." WHERE ".$t_bug_table_where." AND `status` NOT IN (".db_param().",".db_param().")",Array( RESOLVED, CLOSED ));
-            $row = db_fetch_array( $result ); echo $row['total'];
-          ?></b>
-          <span><?php echo lang_get( 'plugin_wbvotetracker_statistics_label_total_active' ); ?></span>
-        </div>
-        <div class="row">
-          <b><?php
-            $t_bug_table = db_get_table( 'mantis_bug_table' );
-            $result = db_query_bound("SELECT COUNT(*) AS `total` FROM ".$t_bug_table." WHERE ".$t_bug_table_where." AND `status` IN (".db_param().",".db_param().",".db_param().") AND `category_id` IN (".db_param().")",Array( RESOLVED, IMPLEMENTED, CLOSED, WBVOTE_CATEGORY_BUGS ));
-            $row = db_fetch_array( $result ); echo $row['total'];
-            $t_bug_table = db_get_table( 'mantis_bug_table' );
-            $result = db_query_bound("SELECT COUNT(*) AS `total` FROM ".$t_bug_table." WHERE ".$t_bug_table_where." AND `category_id` IN (".db_param().")",Array( WBVOTE_CATEGORY_BUGS ));
-            $row = db_fetch_array( $result ); echo ' of '.$row['total'];
-          ?></b>
-          <span><?php echo lang_get( 'plugin_wbvotetracker_statistics_label_total_bugs_resolved' ); ?></span>
-        </div>
-        <div class="row">
-          <b><?php
-            $t_bug_table = db_get_table( 'mantis_bug_table' );
-            $result = db_query_bound("SELECT COUNT(*) AS `total` FROM ".$t_bug_table." WHERE ".$t_bug_table_where." AND `status` IN (".db_param().",".db_param().",".db_param().") AND `category_id` IN (".db_param().")",Array( RESOLVED, IMPLEMENTED, CLOSED, WBVOTE_CATEGORY_FEATURES ));
-            $row = db_fetch_array( $result ); echo $row['total'];
-            $t_bug_table = db_get_table( 'mantis_bug_table' );
-            $result = db_query_bound("SELECT COUNT(*) AS `total` FROM ".$t_bug_table." WHERE ".$t_bug_table_where." AND `category_id` IN (".db_param().")",Array( WBVOTE_CATEGORY_FEATURES ));
-            $row = db_fetch_array( $result ); echo ' of '.$row['total'];
-          ?></b>
-          <span><?php echo lang_get( 'plugin_wbvotetracker_statistics_label_total_features_resolved' ); ?></span>
-        </div>
-        <div class="row">
-          <b><?php
-            $t_bug_table = db_get_table( 'mantis_bug_table' );
-            $result = db_query_bound("SELECT COUNT(*) AS `total` FROM ".$t_bug_table." WHERE ".$t_bug_table_where." AND `status` IN (".db_param().")",Array( CLOSED ));
-            $row = db_fetch_array( $result ); echo $row['total'];
-          ?></b>
-          <span><?php echo lang_get( 'plugin_wbvotetracker_statistics_label_total_closed' ); ?></span>
-        </div>
+    <div class="rColBox stats">
+      <h3><?php
+        if( $project_row ){
+          echo sprintf( lang_get( 'plugin_wbvotetracker_statistics_header_project' ), $project_row['name'] );
+        }
+        else {
+          echo lang_get( 'plugin_wbvotetracker_statistics_header_all' );
+        }
+      ?></h3>
+      <div class="boxRow">
+        <b><?php
+          $t_bug_table = db_get_table( 'mantis_bug_table' );
+          $result = db_query_bound("SELECT COUNT(*) AS `total` FROM ".$t_bug_table." WHERE ".$t_bug_table_where,Array());
+          $row = db_fetch_array( $result ); echo $row['total'];
+        ?></b>
+        <span><?php echo lang_get( 'plugin_wbvotetracker_statistics_label_total' ); ?></span>
       </div>
-      <?php
-        $t_current_user_id = auth_get_current_user_id();
-        if( $t_current_user_id ){
-          $userRow = user_get_row( $t_current_user_id );
-          ?>
-          <div class="rColBox user">
-            <h4>Welcome <?php echo $userRow['realname'] ?></h4>
-            <?php
-            if( !current_user_is_anonymous() ){
-              ?>
-              <ul>
-                <li><a href="<?php echo plugin_page('dashboard') ?>">Dashboard</a>
-                <li><a href="<?php echo plugin_page('browse') ?>&reset=true&category=Features&reporter_id[]=-1">My Features</a>
-                <li><a href="<?php echo plugin_page('browse') ?>&reset=true&category=Bugs&reporter_id[]=-1">My Bugs</a>
-                <li><a href="<?php echo helper_mantis_url( 'account_page.php' ) ?>"><?php echo lang_get( 'account_link' ) ?></a>
-                <li><a href="<?php echo helper_mantis_url( 'account_prefs_page.php' ) ?>"><?php echo lang_get( 'change_preferences_link' ) ?></a>
-                <li><a href="<?php echo helper_mantis_url( 'account_prof_menu_page.php' ) ?>"><?php echo lang_get( 'manage_profiles_link' ) ?></a>
-              </ul>
-              <?php
-            }
-            ?>
-            </div>
-            <?php
-          }
+      <div class="boxRow">
+        <b><?php
+          $t_bug_table = db_get_table( 'mantis_bug_table' );
+          $result = db_query_bound("SELECT COUNT(*) AS `total` FROM ".$t_bug_table." WHERE ".$t_bug_table_where." AND `status` NOT IN (".db_param().",".db_param().")",Array( RESOLVED, CLOSED ));
+          $row = db_fetch_array( $result ); echo $row['total'];
+        ?></b>
+        <span><?php echo lang_get( 'plugin_wbvotetracker_statistics_label_total_active' ); ?></span>
+      </div>
+      <div class="boxRow">
+        <b><?php
+          $t_bug_table = db_get_table( 'mantis_bug_table' );
+          $result = db_query_bound("SELECT COUNT(*) AS `total` FROM ".$t_bug_table." WHERE ".$t_bug_table_where." AND `status` IN (".db_param().",".db_param().",".db_param().") AND `category_id` IN (".db_param().")",Array( RESOLVED, IMPLEMENTED, CLOSED, WBVOTE_CATEGORY_BUGS ));
+          $row = db_fetch_array( $result ); echo $row['total'];
+          $t_bug_table = db_get_table( 'mantis_bug_table' );
+          $result = db_query_bound("SELECT COUNT(*) AS `total` FROM ".$t_bug_table." WHERE ".$t_bug_table_where." AND `category_id` IN (".db_param().")",Array( WBVOTE_CATEGORY_BUGS ));
+          $row = db_fetch_array( $result ); echo ' of '.$row['total'];
+        ?></b>
+        <span><?php echo lang_get( 'plugin_wbvotetracker_statistics_label_total_bugs_resolved' ); ?></span>
+      </div>
+      <div class="boxRow">
+        <b><?php
+          $t_bug_table = db_get_table( 'mantis_bug_table' );
+          $result = db_query_bound("SELECT COUNT(*) AS `total` FROM ".$t_bug_table." WHERE ".$t_bug_table_where." AND `status` IN (".db_param().",".db_param().",".db_param().") AND `category_id` IN (".db_param().")",Array( RESOLVED, IMPLEMENTED, CLOSED, WBVOTE_CATEGORY_FEATURES ));
+          $row = db_fetch_array( $result ); echo $row['total'];
+          $t_bug_table = db_get_table( 'mantis_bug_table' );
+          $result = db_query_bound("SELECT COUNT(*) AS `total` FROM ".$t_bug_table." WHERE ".$t_bug_table_where." AND `category_id` IN (".db_param().")",Array( WBVOTE_CATEGORY_FEATURES ));
+          $row = db_fetch_array( $result ); echo ' of '.$row['total'];
+        ?></b>
+        <span><?php echo lang_get( 'plugin_wbvotetracker_statistics_label_total_features_resolved' ); ?></span>
+      </div>
+      <div class="boxRow">
+        <b><?php
+          $t_bug_table = db_get_table( 'mantis_bug_table' );
+          $result = db_query_bound("SELECT COUNT(*) AS `total` FROM ".$t_bug_table." WHERE ".$t_bug_table_where." AND `status` IN (".db_param().")",Array( CLOSED ));
+          $row = db_fetch_array( $result ); echo $row['total'];
+        ?></b>
+        <span><?php echo lang_get( 'plugin_wbvotetracker_statistics_label_total_closed' ); ?></span>
+      </div>
+    </div>
+    <?php
+      $t_current_user_id = auth_get_current_user_id();
+      if( $t_current_user_id ){
+        $userRow = user_get_row( $t_current_user_id );
         ?>
-        <?php if( last_visited_enabled() ) { ?>
-          <div class="rColBox visited"><?php
-            $t_ids = last_visited_get_array();
-            echo '<h4>'.lang_get( 'recently_visited' ) . '</h4>';
-            $t_first = true;
-            foreach( $t_ids as $t_id ) {
-              if( !$t_first ) echo ', ';
-                else $t_first = false;
-              echo string_get_bug_view_link( $t_id );
-            }
-          ?></div>
-        <?php } ?>
-      </div>
-    </td>
+        <div class="rColBox user">
+          <h4>Welcome <?php echo $userRow['realname'] ?></h4>
+          <?php
+          if( !current_user_is_anonymous() ){
+            ?>
+            <ul>
+              <li><a href="<?php echo plugin_page('dashboard') ?>">Dashboard</a>
+              <li><a href="<?php echo plugin_page('browse') ?>&reset=true&category=Features&reporter_id[]=-1">My Features</a>
+              <li><a href="<?php echo plugin_page('browse') ?>&reset=true&category=Bugs&reporter_id[]=-1">My Bugs</a>
+              <li><a href="<?php echo helper_mantis_url( 'account_page.php' ) ?>"><?php echo lang_get( 'account_link' ) ?></a>
+              <li><a href="<?php echo helper_mantis_url( 'account_prefs_page.php' ) ?>"><?php echo lang_get( 'change_preferences_link' ) ?></a>
+              <li><a href="<?php echo helper_mantis_url( 'account_prof_menu_page.php' ) ?>"><?php echo lang_get( 'manage_profiles_link' ) ?></a>
+            </ul>
+            <?php
+          }
+          ?>
+        </div>
+        <?php
+      }
+    ?>
+    <?php if( last_visited_enabled() ) { ?>
+      <div class="rColBox visited"><?php
+        $t_ids = last_visited_get_array();
+        echo '<h4>'.lang_get( 'recently_visited' ) . '</h4>';
+        $t_first = true;
+        foreach( $t_ids as $t_id ) {
+          if( !$t_first ) echo ', ';
+            else $t_first = false;
+          echo string_get_bug_view_link( $t_id );
+        }
+      ?></div>
+    <?php } ?>
     <?php
     echo ob_get_clean();
   }
@@ -509,9 +506,8 @@ class wbVoteTrackerPlugin extends MantisPlugin  {
 
     // Open Wrapper
     echo '<div class="centercol wbVoteTracker '.(string)preg_replace('/^.*\/(.*?)$/','$1',preg_replace('/\.php$/','',$_SERVER['SCRIPT_NAME'])).'">', "\n";
-    echo '  <table cellpadding="0" cellspacing="0" align="center" width="100%">', "\n";
-    echo '    <tr>', "\n";
-    echo '      <td valign="top">', "\n";
+    echo '  <div class="row">', "\n";
+    echo '    <div class="col center">', "\n";
 
   }
 
@@ -526,12 +522,11 @@ class wbVoteTrackerPlugin extends MantisPlugin  {
     if( !preg_match('/wbVoteTracker/',gpc_get_string('page', '')) ) return;
 
     // Close Wrapper
-    echo '      </td>', "\n";
-    echo '      <td valign="top">', "\n";
+    echo '    </div>', "\n";
+    echo '    <div class="col right">', "\n";
     event_signal( 'EVENT_LAYOUT_RIGHT_COLUMN', array((string)preg_replace('/^.*\/(.*?)$/','$1',preg_replace('/\.php$/','',$_SERVER['SCRIPT_NAME']))) );
-    echo '      </td>', "\n";
-    echo '    <tr>', "\n";
-    echo '  </table>', "\n";
+    echo '    </div>', "\n";
+    echo '  </div>', "\n";
     echo '</div>', "\n";
 
   }
