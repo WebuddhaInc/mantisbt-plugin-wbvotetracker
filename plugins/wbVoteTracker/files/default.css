@@ -34,15 +34,8 @@
   width: 68%;
 }
 .wbVoteTracker .row .col.right {
+  float: right;
   width: 28%;
-}
-@media (max-width: 720px) {
-  .wbVoteTracker .row .col.center,
-  .wbVoteTracker .row .col.right {
-    float: none;
-    display: block;
-    width: 98%;
-  }
 }
 .wbVoteTracker h3 {
   color: #336699;
@@ -222,15 +215,36 @@
   font-size: 11px;
   color: #333;
 }
-.wbVoteTracker .rColBox .row.sub {
+.wbVoteTracker .rColBox .boxRow.sub {
   padding: 0 0 0 10px;
 }
-.wbVoteTracker .rColBox .row.sub b,
-.wbVoteTracker .rColBox .row.sub span {
+.wbVoteTracker .rColBox .boxRow.sub b,
+.wbVoteTracker .rColBox .boxRow.sub span {
   font-size: 10px;
 }
 .wbVoteTracker .rColBox.visited,
 .wbVoteTracker .rColBox.visited a {
   font-size: 11px;
   color: #333;
+}
+@media (max-width: 800px) {
+  .wbVoteTracker .row .col.center,
+  .wbVoteTracker .row .col.right {
+    display: block;
+    float: none;
+    width: 98%;
+  }
+  .wbVoteTracker .rColBox {
+    padding: 10px;
+  }
+  .wbVoteTracker .rColBox .boxRow {
+    box-sizing: border-box;
+    display: inline-block;
+    margin: 0 5px 5px 0;
+    padding: 0;
+  }
+  .wbVoteTracker .rColBox.user,
+  .wbVoteTracker .rColBox.visited {
+    display: none;
+  }
 }

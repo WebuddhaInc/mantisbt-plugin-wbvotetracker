@@ -443,7 +443,7 @@ class wbVoteTrackerPlugin extends MantisPlugin  {
         $userRow = user_get_row( $t_current_user_id );
         ?>
         <div class="rColBox user">
-          <h4>Welcome <?php echo $userRow['realname'] ?></h4>
+          <h3>Welcome <?php echo $userRow['realname'] ?></h3>
           <?php
           if( !current_user_is_anonymous() ){
             ?>
@@ -465,7 +465,7 @@ class wbVoteTrackerPlugin extends MantisPlugin  {
     <?php if( last_visited_enabled() ) { ?>
       <div class="rColBox visited"><?php
         $t_ids = last_visited_get_array();
-        echo '<h4>'.lang_get( 'recently_visited' ) . '</h4>';
+        echo '<h3>'.lang_get( 'recently_visited' ) . '</h3>';
         $t_first = true;
         foreach( $t_ids as $t_id ) {
           if( !$t_first ) echo ', ';
@@ -507,6 +507,9 @@ class wbVoteTrackerPlugin extends MantisPlugin  {
     // Open Wrapper
     echo '<div class="centercol wbVoteTracker '.(string)preg_replace('/^.*\/(.*?)$/','$1',preg_replace('/\.php$/','',$_SERVER['SCRIPT_NAME'])).'">', "\n";
     echo '  <div class="row">', "\n";
+    echo '    <div class="col right">', "\n";
+    event_signal( 'EVENT_LAYOUT_RIGHT_COLUMN', array((string)preg_replace('/^.*\/(.*?)$/','$1',preg_replace('/\.php$/','',$_SERVER['SCRIPT_NAME']))) );
+    echo '    </div>', "\n";
     echo '    <div class="col center">', "\n";
 
   }
@@ -522,9 +525,6 @@ class wbVoteTrackerPlugin extends MantisPlugin  {
     if( !preg_match('/wbVoteTracker/',gpc_get_string('page', '')) ) return;
 
     // Close Wrapper
-    echo '    </div>', "\n";
-    echo '    <div class="col right">', "\n";
-    event_signal( 'EVENT_LAYOUT_RIGHT_COLUMN', array((string)preg_replace('/^.*\/(.*?)$/','$1',preg_replace('/\.php$/','',$_SERVER['SCRIPT_NAME']))) );
     echo '    </div>', "\n";
     echo '  </div>', "\n";
     echo '</div>', "\n";
