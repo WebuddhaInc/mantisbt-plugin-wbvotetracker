@@ -123,7 +123,8 @@ class wbVoteTrackerPlugin extends MantisPlugin  {
       'EVENT_LAYOUT_CONTENT_BEGIN' => 'EVENT_LAYOUT_CONTENT_BEGIN',
       'EVENT_LAYOUT_CONTENT_END'   => 'EVENT_LAYOUT_CONTENT_END',
       'EVENT_LAYOUT_BODY_BEGIN'    => 'EVENT_LAYOUT_BODY_BEGIN',
-      'EVENT_LAYOUT_BODY_END'      => 'EVENT_LAYOUT_BODY_END'
+      'EVENT_LAYOUT_BODY_END'      => 'EVENT_LAYOUT_BODY_END',
+      'EVENT_REPORT_BUG'           => 'EVENT_REPORT_BUG'
     );
   }
 
@@ -545,6 +546,27 @@ class wbVoteTrackerPlugin extends MantisPlugin  {
    *
    ***************************************************************************/
   function EVENT_LAYOUT_BODY_END(){
+  }
+
+  /***************************************************************************
+   *
+   *
+   *
+   ***************************************************************************/
+  function EVENT_REPORT_BUG( $event, $t_bug_data, $t_bug_id ){
+
+    // Vote Option
+      $voteOnReportBug = plugin_config_get( 'voteOnReportBug', -1, false, $t_bug_data->reporter_id, $t_bug_data->project_id );
+      if( $voteOnReportBug < 0 ){
+        $voteOnReportBug = 1;
+        plugin_config_set( 'voteOnReportBug', $voteOnReportBug, NO_USER, ALL_PROJECTS  );
+      }
+
+    // Vote
+      if( $voteOnReportBug ){
+        $this->bug_vote( $t_bug_data->id, $t_bug_data->reporter_id );
+      }
+
   }
 
 }
