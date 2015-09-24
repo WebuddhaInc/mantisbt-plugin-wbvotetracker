@@ -62,80 +62,104 @@
       .requestList .clr {
         clear:both;
       }
-      .requestList .request {
-        margin:0;
-        border-bottom:1px dashed #999;
-        padding:5px 0;
-      }
-      .requestList .request .votes {
-        width:48px;
-        height:85px;
-        float:left;
-        text-align:center;
-        margin:0 5px 0 0;
-      }
-      .requestList .request .votes input.btn_vote {
-        margin:5px 0 0 0;
-        display:inline-block;
-        padding:2px 6px;
-        font-size:11px;
-      }
-      .requestList .request .votes b {
-        padding:10px 0 5px 0;
-        display:block;
-        font-size:1.0rem;
-      }
-      .requestList .request .info {
-        height:85px;
-      }
-      .requestList .request .key {
-        float:right;
-        line-height:32px;
-      }
-      .requestList .request .summary {
-        font-size:1.2rem;
-        line-height:32px;
-        height:32px;
-        overflow:hidden;
-      }
-      .requestList .request .summary a {
-        text-decoration:none;
-        color:#346;
-      }
-      .requestList .request .status,
-      .requestList .request .created,
-      .requestList .request .updated,
-      .requestList .request .stats {
-        display:inline-block;
-        line-height:24px;
-        padding:0 5px;
-        margin:0 5px;
-      }
-      .requestList .request .priority {
-        float:right;
-      }
-      .requestList .request .priority,
-      .requestList .request .category {
-        display:inline-block;
-        line-height:24px;
-        padding:0 5px;
-      }
-      .requestList .request .status {
-        border-radius:3px;
-        background:#FFFF99;
-        margin:0;
-        float:right;
-      }
-      .requestList .request .category {
-        border-radius:3px;
-        background:#FFFF99;
-      }
-      .requestList .request .category.bugs {
-        border-radius:3px;
-        background:#CCCCCC;
-      }
-      .requestList .request .created {
-        margin-left:0;
+      .requestList {
+        .request {
+          position: relative;
+          margin:0;
+          border-bottom:1px dashed #999;
+          padding:5px 0;
+          &.private {
+            border-left: 20px solid rgba(0,0,0,0.50);
+            &:before {
+              display: block;
+              content:"Private";
+              color: white;
+              position: absolute;
+              left: 0;
+              top: 0;
+              padding: 0 6px;
+              line-height: 16px;
+              text-align: center;
+              transform: rotate(90deg);
+              transform-origin: left top 0;
+            }
+          }
+          .votes {
+            width:48px;
+            height:85px;
+            float:left;
+            text-align:center;
+            margin:0 5px 0 0;
+          }
+          .votes input.btn_vote {
+            margin:5px 0 0 0;
+            display:inline-block;
+            padding:2px 6px;
+            font-size:11px;
+          }
+          .votes b {
+            padding:10px 0 5px 0;
+            display:block;
+            font-size:1.0rem;
+          }
+          .info {
+            height:85px;
+          }
+          .key {
+            float:right;
+            line-height:32px;
+          }
+          .summary {
+            font-size:1.2rem;
+            line-height:32px;
+            height:32px;
+            overflow:hidden;
+          }
+          .summary a {
+            text-decoration:none;
+            color:#346;
+          }
+          .status,
+          .created,
+          .updated,
+          .stats {
+            display:inline-block;
+            line-height:24px;
+            padding:0 5px;
+            margin:0 5px;
+          }
+          .view_state,
+          .priority {
+            float:right;
+          }
+          .view_state,
+          .priority,
+          .category {
+            display:inline-block;
+            line-height:24px;
+            padding:0 5px;
+          }
+          .view_state {
+            display: none;
+          }
+          .status {
+            border-radius:3px;
+            background:#FFFF99;
+            margin:0;
+            float:right;
+          }
+          .category {
+            border-radius:3px;
+            background:#FFFF99;
+          }
+          .category.bugs {
+            border-radius:3px;
+            background:#CCCCCC;
+          }
+          .created {
+            margin-left:0;
+          }
+        }
       }
       .requestList .empty_msg {
         margin:10px 0;

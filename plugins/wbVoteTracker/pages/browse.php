@@ -38,6 +38,7 @@
   $t_default_show_changed          = config_get( 'default_show_changed' );
   $category_key                    = gpc_get_string( 'category', '' );
   $reporter_id                     = gpc_get_string_array( FILTER_SEARCH_REPORTER_ID, META_FILTER_ANY );
+  $t_view_state_labels             = array();
 
   // Build Query Filters
     $c_filter = array(
@@ -158,17 +159,25 @@
       <?php if( !count($rows) ){ ?>
         <div class="empty_msg"><?php echo lang_get('plugin_wbvotetracker_browse_empty') ?></div>
       <?php } ?>
-      <?php foreach( $rows AS $t_bug ){ ?>
-        <div class="request">
-          <?php
-            $t_summary = string_display_line_links( $t_bug->summary );
-            $t_last_updated = date( config_get( 'normal_date_format' ), $t_bug->last_updated );
-            $status_color = get_status_color( $t_bug->status, auth_get_current_user_id(), $t_bug->project_id );
-            $t_attachment_count = 0;
-            if(( file_can_view_bug_attachments( $t_bug->id, null ) ) )
-              $t_attachment_count = file_bug_attachment_count( $t_bug->id );
-            $project_name = project_get_field( $t_bug->project_id, 'name' );
+      <?php
+        foreach( $rows AS $t_bug ){
 
+          $t_summary = string_display_line_links( $t_bug->summary );
+          $t_last_updated = date( config_get( 'normal_date_format' ), $t_bug->last_updated );
+          $status_color = get_status_color( $t_bug->status, auth_get_current_user_id(), $t_bug->project_id );
+          $t_attachment_count = 0;
+          if(( file_can_view_bug_attachments( $t_bug->id, null ) ) )
+            $t_attachment_count = file_bug_attachment_count( $t_bug->id );
+          $project_name = project_get_field( $t_bug->project_id, 'name' );
+          if( empty($t_view_state_labels[$t_bug->view_state]) ){
+            $t_view_state_labels[$t_bug->view_state] = string_display_line( get_enum_element( 'view_state', $t_bug->view_state ) );
+          }
+          $t_view_state = $t_view_state_labels[$t_bug->view_state];
+          $t_request_css = array(
+            preg_replace('/[^a-z0-9]/','-',strtolower($t_view_state))
+            );
+
+          echo '<div class="request '. implode(' ', $t_request_css) .'">';
             echo '<div class="votes">';
               echo '<b>'. $t_bug->vote_count .'</b> <span>vote'. ($t_bug->vote_count != 1 ? 's' : '') .'</span>';
               if( !bug_is_readonly( $t_bug->id ) && !bug_is_resolved( $t_bug->id ) )
@@ -216,6 +225,10 @@
                 print_formatted_priority_string( $t_bug );
               echo '</div>';
 
+              echo '<div class="view_state">';
+                echo $t_view_state;
+              echo '</div>';
+
               echo '<div class="created">Posted by ';
                 if( $t_bug->reporter_id > 0 )
                   echo prepare_user_name( $t_bug->reporter_id );
@@ -231,10 +244,11 @@
               echo '</div>';
 
             echo '</div>';
-          ?>
-          <div class="clr"></div>
-        </div>
-      <?php } ?>
+            echo '<div class="clr"></div>';
+          echo '</div>';
+
+        }
+      ?>
     </div>
 
     <?php if( $t_page != 'dashboard' ){ ?>
